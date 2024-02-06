@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm_Motors_Subsystem;
 
@@ -18,6 +19,7 @@ public class ArmMotorsCmd extends Command{
         this.intakeMotorsRunning = intakeMotorsRunning;
         this.armSubsystem = armSubsystem;
         addRequirements(armSubsystem);
+       
     } 
     @Override
     public void initialize() {

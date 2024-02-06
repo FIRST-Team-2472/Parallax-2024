@@ -1,20 +1,15 @@
-package frc.commands;
+package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 
-public class Stream extends CommandBase {
-    DigitalInput LimitSwitch = new DigitalInput(0);
+public class Stream extends Command {
     LimelightHelpers.LimelightResults llresults;
 
     public Stream() {
-
-        // public void ();
         initStreamShuffleBoard();
-
     }
 
     @Override

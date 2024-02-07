@@ -8,16 +8,16 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 public class RobotContainer {
-  Arm_Motors_Subsystem armSubsystem = new Arm_Motors_Subsystem();
+  ArmMotorsSubsystem armSubsystem = new ArmMotorsSubsystem();
   XboxController xbox = new XboxController(OperatorConstants.kDriverControllerPort);
   private AnalogEncoder encoder = new AnalogEncoder(0);
   public RobotContainer() {
-    armSubsystem.setDefaultCommand(new ArmMotorsCmd(armSubsystem, () -> xbox.getLeftY(), // Pitch Motor
+    armSubsystem.setDefaultCommand(new ArmMotorsCmd(armSubsystem, encoder, () -> xbox.getLeftY(), // Pitch Motor
       () -> xbox.getLeftTriggerAxis() > 0.5, // Shooter Motors
         () -> xbox.getRightTriggerAxis() > 0.5, // Push Motor
           () -> xbox.getRightBumper())); // Intake Motors
-    encoder.reset();
-    encoder.setDistancePerRotation(360);
+    //encoder.reset();
+    //encoder.setDistancePerRotation(360);
     new Stream();
     configureBindings();
   }

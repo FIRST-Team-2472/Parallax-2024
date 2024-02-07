@@ -8,13 +8,28 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 
-public class Apriltag_AimingCmd extends Command{
+public class ApriltagAimingCmd extends Command{
     Supplier<Double> yaw, pitch;
-    private double tx, ty, ta, x, y, z;
+    private double tx, ty;
     private Pose3d tagPos = new Pose3d();
     private final double speed = 0.3;
     LimelightHelpers.LimelightResults llresults;
-    public Apriltag_AimingCmd(){
+    public ApriltagAimingCmd(){
         
+    }
+    
+    @Override
+    public void initialize() {}
+  
+    @Override
+    public void execute() {
+    }
+
+    @Override
+    public void end(boolean interrupted) {}
+
+    @Override
+    public boolean isFinished() {
+      return false;
     }
 }

@@ -20,8 +20,9 @@ public final class Constants {
       public static final int kTopIntakeMotorId = 41;
       public static final int kBottomIntakeMotorId = 60;
     }
-
-    
   }
-  
+  public static class IntakeLimelightConstants {
+      public static final int kIntakeLimelightTYAngleOffset = 0;
+      public static final double kIntakeLimelightHeight = 0.0; //height
+  }
 }

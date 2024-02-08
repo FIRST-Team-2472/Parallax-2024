@@ -3,11 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.ArmMotorsSubsystem;
 import frc.robot.commands.*;
 
 public class RobotContainer {
-  Arm_Motors_Subsystem armSubsystem = new Arm_Motors_Subsystem();
+  ArmMotorsSubsystem armSubsystem = new ArmMotorsSubsystem();
   XboxController xbox = new XboxController(OperatorConstants.kDriverControllerPort);
   public RobotContainer() {
     armSubsystem.setDefaultCommand(new ArmMotorsCmd(armSubsystem, () -> xbox.getLeftY(), // Pitch Motor

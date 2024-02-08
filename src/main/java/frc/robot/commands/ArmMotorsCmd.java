@@ -3,14 +3,14 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Arm_Motors_Subsystem;
+import frc.robot.subsystems.ArmMotorsSubsystem;
 
 public class ArmMotorsCmd extends Command{
     private Supplier<Double> pitchMotor;
     private Double intakeMotorsSpeed, shooterMotorsSpeed, pushMotorSpeed, pitchMotorSpeed;
     private Supplier<Boolean> intakeMotorsRunning, shooterMotorsSpeaker, shooterMotorsAmp, pushMotorRunning;
-    private Arm_Motors_Subsystem armSubsystem;
-    public ArmMotorsCmd(Arm_Motors_Subsystem armSubsystem, Supplier<Double> pitchMotor, Supplier<Boolean> shooterMotorsSpeaker, Supplier<Boolean> shooterMotorsAmp, 
+    private ArmMotorsSubsystem armSubsystem;
+    public ArmMotorsCmd(ArmMotorsSubsystem armSubsystem, Supplier<Double> pitchMotor, Supplier<Boolean> shooterMotorsSpeaker, Supplier<Boolean> shooterMotorsAmp, 
         Supplier<Boolean> pushMotorRunning, Supplier<Boolean> intakeMotorsRunning){
         this.pitchMotor = pitchMotor;
         this.shooterMotorsSpeaker = shooterMotorsSpeaker;

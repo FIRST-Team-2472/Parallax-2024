@@ -7,7 +7,7 @@ public final class Constants {
   public static class ArmMotorsConstants{
 
     public static class PitchMotor {
-      public static final int kPitchMotorId = 0101010;
+      public static final int kPitchMotorId = 58;
     }
     public static class ShooterMotors{
       public static final int kTopShooterMotorId = 62;

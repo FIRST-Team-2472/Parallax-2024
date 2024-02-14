@@ -139,8 +139,8 @@ public final class Constants {
     }
   }
   public static class IntakeLimelightConstants {
-      public static final int kIntakeLimelightTYAngleOffset = 0;
-      public static final double kIntakeLimelightHeight = 0.0; //height
+      public static final double kIntakeLimelightTYAngleOffset = 22.5;
+      public static final double kIntakeLimelightHeight = 6.875; //height
   }
     
 

@@ -23,7 +23,8 @@ public class IntakeDetectorCmd extends Command{
         tx = LimelightHelpers.getTX("limelight-intake");
         ty = LimelightHelpers.getTY("limelight-intake") + Constants.IntakeLimelightConstants.kIntakeLimelightTYAngleOffset;
         distanceFwd = Constants.IntakeLimelightConstants.kIntakeLimelightHeight / Math.tan(ty);
-        distanceLR = distanceFwd * Math.tan(tx);
+        //distanceLR = distanceFwd * Math.tan(tx);
+        
         
     }
 

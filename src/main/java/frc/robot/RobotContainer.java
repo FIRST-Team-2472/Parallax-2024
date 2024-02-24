@@ -69,19 +69,12 @@ public class RobotContainer {
   private void configureBindings() {
     new JoystickButton(rightJoystick, 4).onTrue(new InstantCommand(swerveSubsystem :: zeroHeading));
     new JoystickButton(leftJoystick, 0).onTrue(new InstantCommand(intakeDetectorCmd :: execute));
-    //new CommandXboxController(OperatorConstants.kXboxControllerPort).a().onTrue(new SetArmPitchCmd(armSubsystem, pitchMotorEncoder, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle));
-    new CommandXboxController(OperatorConstants.kXboxControllerPort).b().onTrue(new SetArmPitchCmd(armSubsystem, pitchMotorEncoder, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle));
-    new CommandXboxController(OperatorConstants.kXboxControllerPort).x().onTrue(new SetArmPitchCmd(armSubsystem, pitchMotorEncoder, ArmMotorsConstants.PitchMotor.kPitchMotorAmpPresetAngle));
-    new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, pitchMotorEncoder, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
-    if (xbox.getAButton())
-      resetEncoder();
-  }
-  public void resetEncoder(){
-    pitchMotorEncoder.reset();
-    pitchMotorEncoder.setDistancePerRotation(360);
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).a().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).b().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).x().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorAmpPresetAngle));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).axisGreaterThan(1, .5).whileTrue(new runShooter(armSubsystem));
   }
-
   public Command getAutonomousCommand() {
     System.out.println("Autos Begun");
        

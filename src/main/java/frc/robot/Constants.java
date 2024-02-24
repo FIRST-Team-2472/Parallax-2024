@@ -162,9 +162,9 @@ public final class Constants {
     public static final double kAcceptableDistanceError = 0.04;
     public static final double kAcceptableAngleError = 1.5;
   }
-}
+
   
-public static final class PnuematicsConstants{
+  public static final class PnuematicsConstants{
     public static final int kCompressorid = 1;
 
     public static final int kBigLeftPnuematicInflateChannel = 0;
@@ -178,5 +178,6 @@ public static final class PnuematicsConstants{
     
     public static final int kBigRightPnuematicInflateChannel = 2;
     public static final int kBigRightPnuematicDeflateChannel = 14;
+  }
 }
 

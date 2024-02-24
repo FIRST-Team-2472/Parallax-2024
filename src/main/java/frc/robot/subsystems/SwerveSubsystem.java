@@ -100,6 +100,10 @@ public class SwerveSubsystem extends SubsystemBase{
         yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
         thetaController = new PIDController(TargetPosConstants.kPAngleController, 0, 0);
 
+
+        /* Maybe the cause of the autonomous not working. When we call generate path in command sequences the swerveSubsystem is 
+         called 1st and then it trys to zero the heading! This might be a big advancement
+        */
         new Thread(() -> {
             try{
                 Thread.sleep(1000);
@@ -231,7 +235,7 @@ public class SwerveSubsystem extends SubsystemBase{
         double turningSpeed = MathUtil.clamp(thetaController.calculate(angleDifference.getRadians(),
                 0), -1, 1);
         turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
-        turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+        turningSpeed += Math.copySign(TargetPosConstants.kMinAngularSpeedRadians, turningSpeed);
 
         xSpeed = xLimiter.calculate(xSpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
         ySpeed = yLimiter.calculate(ySpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
@@ -252,7 +256,7 @@ public class SwerveSubsystem extends SubsystemBase{
         double turningSpeed = MathUtil.clamp(thetaController.calculate(angleDifference.getRadians(),
                 0), -1, 1) * TargetPosConstants.kMaxAngularSpeed;
 
-        turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+        turningSpeed += Math.copySign(TargetPosConstants.kMinAngularSpeedRadians, turningSpeed);
 
         runModulesFieldRelative(0, 0, turningSpeed);
     }

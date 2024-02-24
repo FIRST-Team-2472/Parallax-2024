@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
@@ -24,13 +25,29 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class CommandSequences {
 
 
-    PosPose2d[] startingNodes = new PosPose2d[4];
-    PosPose2d[] collectingNearNodes = new PosPose2d[3];
-    PosPose2d[] shootingNearNodes = new PosPose2d[3];
-    PosPose2d ampNode = simplePose(1.84, 7.32, -90);
+        PosPose2d[] exampleNodes = new PosPose2d[4];
+        PosPose2d[] importantNodes = new PosPose2d[4];
+        PosPose2d[] startingNodes = new PosPose2d[4];
+        PosPose2d[] collectingNearNodes = new PosPose2d[3];
+        PosPose2d[] shootingNearNodes = new PosPose2d[3];
+        PosPose2d ampNode = simplePose(1.84, 7.32, -90);
+    
 
     public CommandSequences() {
 
+        exampleNodes[0] = simplePose(1, 0, 0);
+        exampleNodes[1] = simplePose(1, 1, 0);
+        exampleNodes[2] = simplePose(0, 1, 0);
+        exampleNodes[3] = simplePose(1, 1, 0);
+
+        // non-amp side of Speaker
+        importantNodes[0] = simplePose(.55, 4.10, 0);
+        // In front of Note
+        importantNodes[1] = simplePose(2.2, 4.10, 0);
+        // Near front of Speaker
+        importantNodes[2] = simplePose(2.2, 5.57, 0);
+        // In from of amp
+        importantNodes[3] = simplePose(1.84, 7.32, -90);
 
         // amp start
         startingNodes[0] = simplePose(1.41, 7.26, 0);
@@ -43,8 +60,8 @@ public class CommandSequences {
 
         // Collecting the near nodes
         collectingNearNodes[0] = simplePose(2.15, 7, 0);
-        collectingNearNodes[1] = simplePose(2.15, 5.5,	0);
-        collectingNearNodes[2] = simplePose(2.15, 4.08, 0);
+        collectingNearNodes[1] = simplePose(2.15, 5.5,	0); //same as imp. n. [2];
+        collectingNearNodes[2] = simplePose(2.15, 4.08, 0); //same as imp. n. [3];
 
         // Shooting to the speaker from the near nodes
         shootingNearNodes[0] = simplePose(2.9, 7, 30);
@@ -53,6 +70,79 @@ public class CommandSequences {
     }
 
    
+    public Command testingPath(SwerveSubsystem swerveSubsystem) {
+
+        System.out.println("Autos Happening");
+        System.out.println(exampleNodes[0].toString());
+        swerveSubsystem.resetOdometry(new Pose2d());
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, exampleNodes[0], List.of(), exampleNodes[1]),
+                genratePath(swerveSubsystem, exampleNodes[1], List.of(), exampleNodes[3]),
+                new SwerveRotateToAngle(swerveSubsystem, Rotation2d.fromDegrees(270))
+                
+            );
+    }
+
+    public Command twoinampCommand(SwerveSubsystem swerveSubsystem, ArmMotorsSubsystem armSubsystem) {
+
+        System.out.println("Autos Happening");
+        System.out.println(exampleNodes[0].toString());
+        swerveSubsystem.resetOdometry(startingNodes[0]);
+
+        return new SequentialCommandGroup(
+                new runShooter(armSubsystem),
+                genratePath(swerveSubsystem, startingNodes[0], List.of(), collectingNearNodes[0]),
+                new runIntake(armSubsystem),
+                genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), startingNodes[0]),
+                new SwerveRotateToAngle(swerveSubsystem, Rotation2d.fromDegrees(0))  
+            );
+    }
+
+    public Command twoinspeakerfrompositiontwoCommand(SwerveSubsystem swerveSubsystem) {
+
+        System.out.println("Autos Happening");
+        System.out.println(exampleNodes[0].toString());
+        swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, startingNodes[2], List.of(), importantNodes[2]),
+                genratePath(swerveSubsystem, importantNodes[2], List.of(), startingNodes[2])
+
+        );
+    }
+
+    public Command twoinspeakerfrompositiononeCommand(SwerveSubsystem swerveSubsystem) {
+        swerveSubsystem.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, startingNodes[1], List.of(), collectingNearNodes[0]));
+    }
+
+    public Command twoinspeakerfrompositionthreeCommand(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.resetOdometry(startingNodes[0]);
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, startingNodes[1], List.of(), importantNodes[1]),
+                genratePath(swerveSubsystem, importantNodes[1], List.of(importantNodes[3].getPositivePoint()), startingNodes[1]));
+    }
+
+    public Command oneinamponefromspeakerpositiononeCommand(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.resetOdometry(startingNodes[0]);
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, startingNodes[1], List.of(), collectingNearNodes[0]),
+                genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), importantNodes[3]));
+    }
+
+    public Command threeinspeakerfrompositionone(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.resetOdometry(startingNodes[0]);
+
+        return new SequentialCommandGroup(
+                genratePath(swerveSubsystem, startingNodes[1], List.of(), collectingNearNodes[0]),
+                genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), importantNodes[3]));
+    }
+
     // generates a path via points
     private static Command genratePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
             List<PositivePoint> midPoints,
@@ -108,4 +198,5 @@ public class CommandSequences {
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
+
 }

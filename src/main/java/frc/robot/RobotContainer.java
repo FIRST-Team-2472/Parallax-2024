@@ -28,9 +28,10 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final IntakeDetectorCmd intakeDetectorCmd = new IntakeDetectorCmd();
   private final PnuematicsSubsystem pnuematicsSubsystem = new PnuematicsSubsystem();
-
+  
 
   private final ArmMotorsSubsystem armSubsystem = new ArmMotorsSubsystem();
+  private final Limelights limelights = new Limelights(swerveSubsystem, armSubsystem);
 
   XboxController xbox = new XboxController(OperatorConstants.kXboxControllerPort);
   public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoyPort);
@@ -68,12 +69,13 @@ public class RobotContainer {
 
   private void configureBindings() {
     new JoystickButton(rightJoystick, 4).onTrue(new InstantCommand(swerveSubsystem :: zeroHeading));
-    new JoystickButton(leftJoystick, 0).onTrue(new InstantCommand(intakeDetectorCmd :: execute));
+    //new JoystickButton(leftJoystick, 0).onTrue(new InstantCommand(intakeDetectorCmd :: execute));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).a().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).b().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).x().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorAmpPresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).axisGreaterThan(1, .5).whileTrue(new runShooter(armSubsystem));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).leftBumper().onTrue(new InstantCommand(limelights :: scanAmpAprilTag));
   }
   public Command getAutonomousCommand() {
     System.out.println("Autos Begun");

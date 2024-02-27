@@ -25,6 +25,7 @@ public class Limelights extends SubsystemBase{
     private ArmMotorsSubsystem armSubsystem;
     private SwerveDriveToPointCmd swerveDriveToPointCmd;
     private SwerveRotateToAngle swerveRotateToAngle;
+    private SetArmPitchCmd setArmPitchCmd;
     public Limelights(SwerveSubsystem swerveSubsystem, ArmMotorsSubsystem armSubsystem){
         this.swerveSubsystem = swerveSubsystem;
         this.armSubsystem = armSubsystem;
@@ -34,12 +35,12 @@ public class Limelights extends SubsystemBase{
       //if (llresults.targetingResults.targets_Fiducials.length > 0) {
         //tagPos = llresults.targetingResults.targets_Fiducials[0].getTargetPose_CameraSpace();
         //s = new FieldPose2d(tagPos.toPose2d().getX(), tagPos.toPose2d().getY(), tagPos.toPose2d().getRotation());
-        new ApriltagAimingCmd(swerveSubsystem, swerveDriveToPointCmd, armSubsystem, new PosPose2d(1.84, 7.32, new Rotation2d(-90)));
+        new ApriltagAimingCmd(swerveSubsystem, swerveDriveToPointCmd, armSubsystem, setArmPitchCmd, new PosPose2d(1.84, 7.32, new Rotation2d(-90)));
       //}
     }
     public void scanSpeakerAprilTag(){
         tx = LimelightHelpers.getTX("limelight-shooter");
-        new ApriltagAimingCmd(swerveSubsystem, swerveRotateToAngle, armSubsystem, tx);
+        new ApriltagAimingCmd(swerveSubsystem, swerveRotateToAngle, armSubsystem, setArmPitchCmd, tx);
         /*
         new PosPose2d(0.45, 5.52, new Rotation2d(0));
         new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorAmpPresetAngle);
@@ -54,13 +55,13 @@ public class Limelights extends SubsystemBase{
         */
       }
     
-    /*
+    
     public void intakeDetectNote(){
       tx = LimelightHelpers.getTX("limelight-intake");
       ty = LimelightHelpers.getTY("limelight-intake") + IntakeLimelightConstants.kIntakeLimelightTYAngleOffset;
       distanceFwd = IntakeLimelightConstants.kIntakeLimelightHeight / Math.tan(ty);
       distanceLR = distanceFwd * Math.tan(tx);
     }
-    */
+    
     
 }

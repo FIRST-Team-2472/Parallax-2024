@@ -9,7 +9,7 @@ public class SetArmPitchCmd extends Command {
     private ArmMotorsSubsystem armMotorsSubsystem;
     private double angleDeg, secondAngleDeg;
     private final Timer timer, seentTimer;
-    private boolean seen, collection;
+    private boolean seen, collection, noRev;
     
     public SetArmPitchCmd(ArmMotorsSubsystem armMotorsSubsystem, double angleDeg) {
         this.angleDeg = angleDeg;
@@ -18,6 +18,16 @@ public class SetArmPitchCmd extends Command {
         this.armMotorsSubsystem = armMotorsSubsystem;
         addRequirements(armMotorsSubsystem);
     }
+
+    public SetArmPitchCmd(ArmMotorsSubsystem armMotorsSubsystem, double angleDeg, boolean noRev) {
+        this.angleDeg = angleDeg;
+        this.timer = new Timer();
+        seentTimer = new Timer();
+        this.armMotorsSubsystem = armMotorsSubsystem;
+        addRequirements(armMotorsSubsystem);
+        this.noRev = true;
+    }
+
     public SetArmPitchCmd(ArmMotorsSubsystem armMotorsSubsystem, double angleDeg, double secondAngleDeg, boolean collection) {
         this(armMotorsSubsystem, angleDeg);
         this.secondAngleDeg = secondAngleDeg;
@@ -45,6 +55,7 @@ public class SetArmPitchCmd extends Command {
         armMotorsSubsystem.runPitchMotorWithKP(angleDeg);
 
         //just revving up the motors so we dont waste time
+        if(!noRev)
             armMotorsSubsystem.runShooterMotors(.7);
 
         //if we plan to collect a note and havent seen it we run the intake system

@@ -38,8 +38,10 @@ public class CommandSequences {
         unImportantNodes[0] = simplePose(3.9, 1.95, 0);
         //stage side middle note
         unImportantNodes[1] = simplePose(8.24, 0.79, 0);
-        unImportantNodes[2] = simplePose(0, 1, 0);
-        unImportantNodes[3] = simplePose(1, 1, 0);
+        //close note 3 for  4 auto
+        unImportantNodes[2] = simplePose(2.4, 4.36, 34);
+        // amp side note for 3 in auto
+        unImportantNodes[3] = simplePose(2.89, 7, -55);
 
         // non-amp side of Speaker
         importantNodes[0] = simplePose(.55, 4.10, 0);
@@ -184,10 +186,10 @@ public class CommandSequences {
                 new runShooter(armSubsystem),
                 //move, pick up note and move arm to speaker angle
                 new ParallelCommandGroup(
-                    genratePath(swerveSubsystem, startingNodes[2], List.of(), collectingNearNodes[0]),
+                    genratePath(swerveSubsystem, startingNodes[2], List.of(), unImportantNodes[3]),
                     new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle, true)),
                 //move back
-                genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), startingNodes[2]),
+                genratePath(swerveSubsystem, unImportantNodes[3], List.of(), startingNodes[2]),
                 //fire note two
                 new runShooter(armSubsystem),
                 //move, pick up note and move arm to speaker angle again
@@ -209,10 +211,10 @@ public class CommandSequences {
                 new runShooter(armSubsystem),
                 //move, pick up note and move arm to speaker angle
                 new ParallelCommandGroup(
-                    genratePath(swerveSubsystem, startingNodes[2], List.of(), collectingNearNodes[0]),
+                    genratePath(swerveSubsystem, startingNodes[2], List.of(), unImportantNodes[3]),
                     new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle, true)),
                 //move back
-                genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), startingNodes[2]),
+                genratePath(swerveSubsystem, unImportantNodes[3], List.of(), startingNodes[2]),
                 //fire note two
                 new runShooter(armSubsystem),
                 //move, pick up note and move arm to speaker angle again
@@ -225,10 +227,10 @@ public class CommandSequences {
                 new runShooter(armSubsystem), //are we really going to even attempt a 4 note auto?
                 //move, pick up note and move arm to speaker angle again again
                 new ParallelCommandGroup(
-                    genratePath(swerveSubsystem, startingNodes[2], List.of(), collectingNearNodes[2]),
+                    genratePath(swerveSubsystem, startingNodes[2], List.of(), unImportantNodes[2]),
                     new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle, true)),
                 //move back
-                genratePath(swerveSubsystem, collectingNearNodes[2], List.of(), startingNodes[2]),
+                genratePath(swerveSubsystem, unImportantNodes[2], List.of(), startingNodes[2]),
                 //fire note 4
                 new runShooter(armSubsystem)
                 );

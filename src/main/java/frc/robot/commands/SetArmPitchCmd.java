@@ -7,7 +7,7 @@ import frc.robot.subsystems.ArmMotorsSubsystem;
 
 public class SetArmPitchCmd extends Command {
     private ArmMotorsSubsystem armMotorsSubsystem;
-    private double angleDeg, secondAngleDeg;
+    private double angleDeg, secondAngleDeg, duration;
     private final Timer timer, seentTimer;
     private boolean seen, collection, noRev;
     
@@ -32,6 +32,15 @@ public class SetArmPitchCmd extends Command {
         this(armMotorsSubsystem, angleDeg);
         this.secondAngleDeg = secondAngleDeg;
         this.collection = collection;
+        seen = false;
+        addRequirements(armMotorsSubsystem);
+    }
+
+    public SetArmPitchCmd(ArmMotorsSubsystem armMotorsSubsystem, double angleDeg, double secondAngleDeg, boolean collection, double duration) {
+        this(armMotorsSubsystem, angleDeg);
+        this.secondAngleDeg = secondAngleDeg;
+        this.collection = collection;
+        this.duration = duration;
         seen = false;
         addRequirements(armMotorsSubsystem);
     }

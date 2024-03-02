@@ -118,7 +118,7 @@ public class CommandSequences {
 
                 new ParallelCommandGroup(
                         new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle,
-                                ArmMotorsConstants.PitchMotor.kPitchMotorFarSpeakerPresetAngle, true),
+                                ArmMotorsConstants.PitchMotor.kPitchMotorFarSpeakerPresetAngle, true, 0.8),
 
                         genratePath(swerveSubsystem, startingNodes[2], List.of(), importantNodes[2])),
 

@@ -1,15 +1,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmMotorsConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ArmMotorsSubsystem;
+import frc.robot.Constants.*;
+
 
 public class SetArmPitchCmd extends Command {
     private ArmMotorsSubsystem armMotorsSubsystem;
     private double angleDeg, secondAngleDeg, duration;
-    private final Timer timer, seentTimer;
+    private Timer timer, seentTimer, dTimer;
     private boolean seen, collection, noRev;
+    XboxController xbox = new XboxController(OperatorConstants.kXboxControllerPort);
     
     public SetArmPitchCmd(ArmMotorsSubsystem armMotorsSubsystem, double angleDeg) {
         this.angleDeg = angleDeg;
@@ -41,6 +46,8 @@ public class SetArmPitchCmd extends Command {
         this.secondAngleDeg = secondAngleDeg;
         this.collection = collection;
         this.duration = duration;
+        this.dTimer = new Timer();
+        dTimer.start();
         seen = false;
         addRequirements(armMotorsSubsystem);
     }
@@ -55,7 +62,7 @@ public class SetArmPitchCmd extends Command {
         //once we see the note, we reverse the intake motors for a split second 
         //to counteract the inertia and then we start switching to the second
         //angle we desired
-        if(collection && armMotorsSubsystem.getPhotoElectricSensor() && !seen){
+        if(duration == 0.0 && collection && armMotorsSubsystem.getPhotoElectricSensor() && !seen){
             seen = true;
             seentTimer.start();
             angleDeg = secondAngleDeg;
@@ -64,20 +71,25 @@ public class SetArmPitchCmd extends Command {
         armMotorsSubsystem.runPitchMotorWithKP(angleDeg);
 
         //just revving up the motors so we dont waste time
-        if(!noRev)
+        if(!noRev && duration == 0.0 /* || xbox.getRightTriggerAxis() > 0.5 || xbox.getBButtonPressed() */)
             armMotorsSubsystem.runShooterMotors(.7);
+
 
         //if we plan to collect a note and havent seen it we run the intake system
         // and rev the motors
-        if (collection && !seen) {
+        if (duration == 0.0 && collection && !seen) {
             armMotorsSubsystem.runIntakeMotors(0.6);
             armMotorsSubsystem.runPushMotor(0.6);
             armMotorsSubsystem.runShooterMotors(.7);
         }
 
         //basically run it in reverse for .2 seconds after to remove any intertia
-        if(seen && !seentTimer.hasElapsed(0.2)) {
+        if(duration == 0.0 && seen && !seentTimer.hasElapsed(0.2)) {
             armMotorsSubsystem.runPushMotor(-0.3);
+        }
+        if(duration != 0.0 && !dTimer.hasElapsed(duration)){
+            armMotorsSubsystem.runIntakeMotors(0.6);
+            armMotorsSubsystem.runPushMotor(0.6);
         }
 
     } 

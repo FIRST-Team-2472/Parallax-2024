@@ -10,12 +10,13 @@ import frc.robot.subsystems.ArmMotorsSubsystem;
 public class runShooter extends Command { 
 
     private ArmMotorsSubsystem armSubsystem;
-    private Timer timer;
+    private Timer timer, shotTimer;
 
 
 
     public runShooter(ArmMotorsSubsystem ArmSubsystem) {
         timer = new Timer();
+        shotTimer = new Timer();
         this.armSubsystem = ArmSubsystem;
         addRequirements(armSubsystem);
     }
@@ -27,14 +28,13 @@ public class runShooter extends Command {
 
     @Override
     public void execute() {
-        if (timer.hasElapsed(0.01)) {
+        
             armSubsystem.runShooterMotors(0.7);
-        } 
 
-        if (timer.hasElapsed(2)) {
-            armSubsystem.runShooterMotors(0.7);
-            armSubsystem.runPushMotor(0.25);
-            armSubsystem.runIntakeMotors(0.25);
+        if (armSubsystem.getShooterSpeed() < -3500) {
+            armSubsystem.runPushMotor(0.6);
+            armSubsystem.runIntakeMotors(0.6);
+            shotTimer.start();
         }
     }
 
@@ -47,6 +47,6 @@ public class runShooter extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(3);
+        return timer.hasElapsed(2) || shotTimer.hasElapsed(.15);
     }
 }

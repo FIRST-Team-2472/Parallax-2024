@@ -11,8 +11,8 @@ public class runIntake extends Command {
 
     private ArmMotorsSubsystem armSubsystem;
     private ArmMotorsCmd armCmd;
-    private Timer timer;
-
+    private Timer timer, seenTimer;
+    private boolean seen;
 
 
     public runIntake(ArmMotorsSubsystem armSubsystem) {
@@ -28,8 +28,17 @@ public class runIntake extends Command {
 
     @Override
     public void execute() {
-        armSubsystem.runIntakeMotors(0.6);
-        armSubsystem.runPushMotor(0.6);
+        if(!seen){
+            armSubsystem.runIntakeMotors(0.6);
+            armSubsystem.runPushMotor(0.6);
+        }else if(!seenTimer.hasElapsed(0.2)){
+            armSubsystem.runIntakeMotors(-0.3);
+            armSubsystem.runPushMotor(-0.3);
+        }
+        if(armSubsystem.getPhotoElectricSensor() && !seen){
+            seen = true;
+            seenTimer.start();
+        }
     }
 
     @Override
@@ -40,6 +49,6 @@ public class runIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(0.8);
+        return timer.hasElapsed(5) || seenTimer.hasElapsed(0.2);
     }
 }

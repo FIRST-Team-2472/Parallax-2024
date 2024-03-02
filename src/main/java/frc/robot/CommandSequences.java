@@ -171,7 +171,8 @@ public class CommandSequences {
                 new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle),
                 new runShooter(armSubsystem),
                 new ParallelCommandGroup(genratePath(swerveSubsystem, startingNodes[1], List.of(), collectingNearNodes[0]), 
-                new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, ArmMotorsConstants.PitchMotor.kPitchMotorFarSpeakerPresetAngle, true)),
+                new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, 
+                ArmMotorsConstants.PitchMotor.kPitchMotorFarSpeakerPresetAngle, true)),
                 new runShooter(armSubsystem),
                 new ParallelCommandGroup(genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), importantNodes[2]), 
                 new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, ArmMotorsConstants.PitchMotor.kPitchMotorFarSpeakerPresetAngle, true), new runShooter(armSubsystem))

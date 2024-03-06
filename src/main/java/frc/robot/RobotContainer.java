@@ -20,9 +20,7 @@ import frc.robot.commands.*;
 import frc.robot.CommandSequences;
 
 public class RobotContainer {
-  private final String placementone = "2 in amp command", placementtwo = "2 in speaker from position 2", 
-  placementthree = "2 in speaker from position 1", path4 =  "2 in Speaker from Position 3", 
-  testingPath =  "Drive from start", justShoot = "Just Shoot", stagePath = "Under Stage", justShootAndMove = "Shoot and Move";
+  private final String placementone = "2 in amp command", placementtwo = "2 in speaker from position 2", placementthree = "2 in speaker from position 1", path4 =  "2 in Speaker from Position 3", testingPath =  "Test Path";
   
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -44,8 +42,7 @@ public class RobotContainer {
   public RobotContainer() {
     armSubsystem.setDefaultCommand(new ArmMotorsCmd(armSubsystem, () -> xbox.getLeftY(), // Pitch Motor
        () -> xbox.getRightTriggerAxis() > 0.5, () -> xbox.getLeftTriggerAxis() > 0.5, // Shooter Motors
-      () -> leftJoystick.getRawButton(1),
-      () -> xbox.getYButton())); // Intake Motors
+      () -> leftJoystick.getRawButton(1))); // Intake Motors
   
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
@@ -64,9 +61,6 @@ public class RobotContainer {
     m_chooser.addOption(placementthree, placementthree);
     m_chooser.addOption(path4, path4);
     m_chooser.addOption(testingPath, testingPath);
-    m_chooser.addOption(stagePath, stagePath);
-    m_chooser.addOption(justShoot, justShoot);
-    m_chooser.addOption(justShootAndMove, justShootAndMove);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -86,7 +80,7 @@ public class RobotContainer {
     new CommandXboxController(OperatorConstants.kXboxControllerPort).a().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).b().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).x().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorAmpPresetAngle));
-    //new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
  
     new CommandXboxController(OperatorConstants.kXboxControllerPort).leftBumper().onTrue(new InstantCommand(limelights :: scanAmpAprilTag));
     new CommandXboxController(OperatorConstants.kXboxControllerPort).rightBumper().onTrue(new InstantCommand(limelights :: scanSpeakerAprilTag));
@@ -98,7 +92,8 @@ public class RobotContainer {
       m_autoSelected = m_chooser.getSelected();
 
       if (m_autoSelected == testingPath)
-        return new ParallelCommandGroup(commandSequences.driveFromZone(swerveSubsystem));
+        return new ParallelCommandGroup(commandSequences.testingPath(swerveSubsystem));
+
 
       if (m_autoSelected == placementone)
       return new ParallelCommandGroup(commandSequences.twoinampCommand(swerveSubsystem, armSubsystem));
@@ -111,15 +106,6 @@ public class RobotContainer {
 
       if (m_autoSelected == path4)
       return new ParallelCommandGroup(commandSequences.twoinspeakerfrompositionthreeCommand(swerveSubsystem, armSubsystem));
-
-      if (m_autoSelected == stagePath)
-      return new ParallelCommandGroup(commandSequences.underStage(swerveSubsystem));
-
-      if (m_autoSelected == justShoot)
-      return new ParallelCommandGroup(commandSequences.justShoot(armSubsystem));
-
-      if (m_autoSelected == justShootAndMove)
-      return new ParallelCommandGroup(commandSequences.justShootAndMove(armSubsystem, swerveSubsystem));
 
     return null;
   }

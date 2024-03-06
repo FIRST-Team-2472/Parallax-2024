@@ -14,7 +14,6 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.ArmMotorsConstants;
 import frc.robot.Constants.AutoConstants;
@@ -28,8 +27,8 @@ public class CommandSequences {
 
 
         PosPose2d[] exampleNodes = new PosPose2d[4];
-        PosPose2d[] importantNodes = new PosPose2d[6];
-        PosPose2d[] startingNodes = new PosPose2d[5];
+        PosPose2d[] importantNodes = new PosPose2d[4];
+        PosPose2d[] startingNodes = new PosPose2d[4];
         PosPose2d[] collectingNearNodes = new PosPose2d[3];
         PosPose2d[] shootingNearNodes = new PosPose2d[3];
         PosPose2d ampNode = simplePose(1.84, 7.32, -90);
@@ -37,7 +36,7 @@ public class CommandSequences {
 
     public CommandSequences() {
 
-        exampleNodes[0] = simplePose(3, 2, 0);
+        exampleNodes[0] = simplePose(1, 0, 0);
         exampleNodes[1] = simplePose(1, 1, 0);
         exampleNodes[2] = simplePose(0, 1, 0);
         exampleNodes[3] = simplePose(1, 1, 0);
@@ -49,11 +48,7 @@ public class CommandSequences {
         // Near front of Speaker
         importantNodes[2] = simplePose(2.2, 5.57, 0);
         // In from of amp
-        importantNodes[3] = simplePose(1.84, 7.32, -130);
-        //amp side of stage
-        importantNodes[4] = simplePose(4.28, 6.30, 0);
-        //under the stage
-        importantNodes[5] = simplePose(4.78, 4.15, 0);
+        importantNodes[3] = simplePose(1.84, 7.32, -90);
 
         // amp start
         startingNodes[0] = simplePose(1.41, 7.26, 0);
@@ -63,8 +58,6 @@ public class CommandSequences {
         startingNodes[2] = simplePose(1.4, 5.52, 0);
         // speakr start 3
         startingNodes[3] = simplePose(0.71, 4.38, -60);
-
-        startingNodes[4] = simplePose(2.46, 7.27, 0);
 
         // Collecting the near nodes
         collectingNearNodes[0] = simplePose(2.15, 7, 0);
@@ -78,14 +71,17 @@ public class CommandSequences {
     }
 
    
-    public Command driveFromZone(SwerveSubsystem swerveSubsystem) {
+    public Command testingPath(SwerveSubsystem swerveSubsystem) {
 
         System.out.println("Autos Happening");
         System.out.println(exampleNodes[0].toString());
-        swerveSubsystem.resetOdometry(startingNodes[0]);
- 
+        swerveSubsystem.resetOdometry(new Pose2d());
+
         return new SequentialCommandGroup(
-                genratePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4])
+                genratePath(swerveSubsystem, exampleNodes[0], List.of(), exampleNodes[1]),
+                genratePath(swerveSubsystem, exampleNodes[1], List.of(), exampleNodes[3]),
+                new SwerveRotateToAngle(swerveSubsystem, Rotation2d.fromDegrees(270))
+                
             );
     }
 
@@ -113,10 +109,12 @@ public class CommandSequences {
         swerveSubsystem.resetOdometry(startingNodes[2]);
 
         return new SequentialCommandGroup(
-                new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle, 1),
+                new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle),
                 new runShooter(armSubsystem),
-                new ParallelCommandGroup(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle, 2), genratePath(swerveSubsystem, startingNodes[2], List.of(), importantNodes[2])),
-                new runShooter(armSubsystem)
+                new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorIntakePresetAngle),
+                genratePath(swerveSubsystem, startingNodes[2], List.of(), importantNodes[2]),
+                new runIntake(armSubsystem),
+                genratePath(swerveSubsystem, importantNodes[2], List.of(), startingNodes[2])
 
         );
     }
@@ -158,38 +156,6 @@ public class CommandSequences {
         return new SequentialCommandGroup(
                 genratePath(swerveSubsystem, startingNodes[1], List.of(), collectingNearNodes[0]),
                 genratePath(swerveSubsystem, collectingNearNodes[0], List.of(), importantNodes[3]));
-    }
-
-        public Command underStage(SwerveSubsystem swerveSubsystem) {
-
-        System.out.println("Autos Happening");
-        System.out.println(exampleNodes[0].toString());
-        swerveSubsystem.resetOdometry(startingNodes[0]);
- 
-        return new SequentialCommandGroup(
-                genratePath(swerveSubsystem, startingNodes[0], List.of(importantNodes[4].getPositivePoint()), importantNodes[5])
-            );
-        }
-
-    public Command justShoot(ArmMotorsSubsystem armSubsystem) {
-        
-        
-        return new SequentialCommandGroup(
-            new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle),
-            new runShooter(armSubsystem)
-        );
-    }
-
-    public Command justShootAndMove(ArmMotorsSubsystem armSubsystem, SwerveSubsystem swerveSubsystem) {
-        
-        swerveSubsystem.resetOdometry(startingNodes[3]);
-
-
-        return new SequentialCommandGroup(
-            new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorSpeakerPresetAngle),
-            new runShooter(armSubsystem),
-            genratePath(swerveSubsystem, startingNodes[3], List.of(), exampleNodes[0])
-        );
     }
 
     // generates a path via points

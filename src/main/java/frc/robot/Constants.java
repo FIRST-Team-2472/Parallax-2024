@@ -94,7 +94,7 @@ public final class Constants {
 
   public static final class AutoConstants{
     public static final double kMaxSpeedMetersPerSecond = 2.5;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1.5;
     public static final double kPXController = 1.5;
     public static final double kPYController = 1.5;
     public static final double kPThetaController = 1.5;
@@ -110,13 +110,18 @@ public final class Constants {
       public static final int kPitchMotorId = 58;
       public static final double kPitchMotorKP = 0.15;
       public static final int kPitchEncoderId = 0;
+<<<<<<< HEAD
       public static final double kPitchEncoderOffset = -146.2;
+=======
+      public static final double kPitchEncoderOffset = -148.3;
+>>>>>>> main
       public static final double kPitchInternalEncoderConversionFactor = -((4 / 9) * 100); // -44.4444...
       public static final double kPitchBaseIdleForce = 0.052;
       public static final double kPitchEncoderForwardLimit = 10;
       public static final double kPitchEncoderReverseLimit = -88;
-      public static final double kPitchMotorIntakePresetAngle = 92.0;
-      public static final double kPitchMotorSpeakerPresetAngle = 82.0;
+      public static final double kPitchMotorIntakePresetAngle = 90.5;
+      public static final double kPitchMotorSpeakerPresetAngle = 80.0;
+      public static final double kPitchMotorFarSpeakerPresetAngle = 67.0;
       public static final double kPitchMotorAmpPresetAngle = -7.0;
       public static final double kPitchMotorStandbyPresetAngle = 0.0;
     }

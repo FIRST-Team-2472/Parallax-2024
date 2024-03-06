@@ -64,14 +64,14 @@ public class ApriltagAimingCmd extends Command{
 
     @Override
     public boolean isFinished() {
-      return if(isCompleted || timer.hasElapsed(5));
+      return (isCompleted || timer.hasElapsed(5));
     }
 
 
     public void shootInAmp(){
       if(swerveDriveToPointCmd.isFinished()){
         if (!movedarm){
-          setArmPitchCmd = new setArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorAmpPresetAngle);
+          setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorAmpPresetAngle);
           movedarm = true;
           timer = new Timer();
         }
@@ -81,7 +81,7 @@ public class ApriltagAimingCmd extends Command{
           if(timer.hasElapsed(3)){
             armSubsystem.runShooterMotors(0.0);
             armSubsystem.runPushMotor(0.0);
-            setArmPitchCmd = new setArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorIntakePresetAngle);
+            setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorIntakePresetAngle);
             if (setArmPitchCmd.isFinished())
               isCompleted = true;
           }
@@ -92,7 +92,7 @@ public class ApriltagAimingCmd extends Command{
     public void shootInSpeaker(){
       if(swerveRotateToAngle.isFinished()){
         if (!movedarm){
-        setArmPitchCmd = new setArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
+        setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
         movedarm = true;
         timer = new Timer();
         }

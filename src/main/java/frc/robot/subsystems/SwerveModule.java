@@ -4,9 +4,11 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,7 +27,7 @@ public class SwerveModule {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
 
-    private final SparkMaxPIDController turningPidController;
+    private final SparkPIDController turningPidController;
 
     private CANcoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
@@ -41,8 +43,8 @@ public class SwerveModule {
         config.MagnetSensor.MagnetOffset = -absoluteEncoderoffset;
         absoluteEncoder.getConfigurator().apply(config);
 
-        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
+        driveMotor = new CANSparkMax(driveMotorId, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+        turningMotor = new CANSparkMax(turningMotorId, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
         driveMotor.restoreFactoryDefaults();
         turningMotor.restoreFactoryDefaults();

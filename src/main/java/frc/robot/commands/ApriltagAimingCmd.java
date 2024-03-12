@@ -28,8 +28,8 @@ public class ApriltagAimingCmd extends Command{
         this.setArmPitchCmd = setArmPitchCmd;
         this.posPose2d = posPose2d;
         shootingInAmp = true;
-        addRequirements(armSubsystem);
-        addRequirements(swerveSubsystem);
+        //addRequirements(armSubsystem);
+        //addRequirements(swerveSubsystem);
     }
     public ApriltagAimingCmd(SwerveSubsystem swerveSubsystem, SwerveRotateToAngle swerveRotateToAngle, ArmMotorsSubsystem armSubsystem, SetArmPitchCmd setArmPitchCmd, double tx){//PosPose2d posPose2d){
         this.swerveSubsystem = swerveSubsystem;
@@ -39,15 +39,20 @@ public class ApriltagAimingCmd extends Command{
         this.tx = tx;
         //this.posPose2d = posPose2d;
         shootingInAmp = false;
-        addRequirements(armSubsystem);
-        addRequirements(swerveSubsystem);
+    }
+    public ApriltagAimingCmd(SwerveSubsystem swerveSubsystem, ArmMotorsSubsystem armSubsystem){//PosPose2d posPose2d){
+        this.swerveSubsystem = swerveSubsystem;
+        this.armSubsystem = armSubsystem;
+        tx = LimelightHelpers.getTX("limelight-shooter");
+        //this.posPose2d = posPose2d;
+        shootingInAmp = false;
     }
     @Override
     public void initialize() {
       if (shootingInAmp)
         swerveDriveToPointCmd = new SwerveDriveToPointCmd(swerveSubsystem, posPose2d);
       else
-        swerveRotateToAngle = new SwerveRotateToAngle(swerveSubsystem, (new Rotation2d(tx).plus(swerveSubsystem.getRotation2d())));
+        new SwerveRotateToAngle(swerveSubsystem, (new Rotation2d(tx).plus(swerveSubsystem.getRotation2d())));
       movedarm = false;
       isCompleted = false;
     }
@@ -90,14 +95,16 @@ public class ApriltagAimingCmd extends Command{
     }
 
     public void shootInSpeaker(){
-      if(swerveRotateToAngle.isFinished()){
+      //if(swerveRotateToAngle.isFinished()){
+        /*
         if (!movedarm){
         setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
         movedarm = true;
         timer = new Timer();
         }
         if (setArmPitchCmd.isFinished())
-          isCompleted = true;
+        */
+         // isCompleted = true;
       }
       /*
       new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
@@ -113,5 +120,5 @@ public class ApriltagAimingCmd extends Command{
         armSubsystem.runPushMotor(0.0);
         new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorIntakePresetAngle);
         */
-    }//}}
+    //}//}}
 }

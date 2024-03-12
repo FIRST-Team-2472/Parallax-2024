@@ -83,7 +83,8 @@ public class RobotContainer {
     new CommandXboxController(OperatorConstants.kXboxControllerPort).y().onTrue(new SetArmPitchCmd(armSubsystem, ArmMotorsConstants.PitchMotor.kPitchMotorStandbyPresetAngle));
  
     new CommandXboxController(OperatorConstants.kXboxControllerPort).leftBumper().onTrue(new InstantCommand(limelights :: scanAmpAprilTag));
-    new CommandXboxController(OperatorConstants.kXboxControllerPort).rightBumper().onTrue(new InstantCommand(limelights :: scanSpeakerAprilTag));
+    //new CommandXboxController(OperatorConstants.kXboxControllerPort).rightBumper().onTrue(new InstantCommand(limelights :: scanSpeakerAprilTag));
+    new CommandXboxController(OperatorConstants.kXboxControllerPort).rightBumper().onTrue(new ApriltagAimingCmd(swerveSubsystem, armSubsystem));
   }
 
   public Command getAutonomousCommand() {

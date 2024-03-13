@@ -40,27 +40,31 @@ public class ApriltagAimingCmd extends Command{
         //this.posPose2d = posPose2d;
         shootingInAmp = false;
     }
-    public ApriltagAimingCmd(SwerveSubsystem swerveSubsystem, ArmMotorsSubsystem armSubsystem){//PosPose2d posPose2d){
+    public ApriltagAimingCmd(SwerveSubsystem swerveSubsystem, ArmMotorsSubsystem armSubsystem){
         this.swerveSubsystem = swerveSubsystem;
         this.armSubsystem = armSubsystem;
         tx = LimelightHelpers.getTX("limelight-shooter");
-        //this.posPose2d = posPose2d;
         shootingInAmp = false;
+        timer = new Timer();
+        //addRequirements(swerveSubsystem);
     }
     @Override
     public void initialize() {
       if (shootingInAmp)
         swerveDriveToPointCmd = new SwerveDriveToPointCmd(swerveSubsystem, posPose2d);
       else
-        new SwerveRotateToAngle(swerveSubsystem, (new Rotation2d(tx).plus(swerveSubsystem.getRotation2d())));
+        swerveRotateToAngle = new SwerveRotateToAngle(swerveSubsystem, (new Rotation2d(Math.toRadians(tx)).plus(swerveSubsystem.getRotation2d())));
       movedarm = false;
       isCompleted = false;
+      timer.start();
+      System.out.println("initialize");
     }
   
     @Override
     public void execute() {
       if (shootingInAmp) shootInAmp();
       else shootInSpeaker();
+      System.out.println("executing");
     }
 
     
@@ -69,12 +73,15 @@ public class ApriltagAimingCmd extends Command{
 
     @Override
     public boolean isFinished() {
+      if(isCompleted || timer.hasElapsed(5))
+        System.out.println("finished");
       return (isCompleted || timer.hasElapsed(5));
     }
 
 
     public void shootInAmp(){
       if(swerveDriveToPointCmd.isFinished()){
+        System.out.println("it finished");
         if (!movedarm){
           setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorAmpPresetAngle);
           movedarm = true;
@@ -95,7 +102,8 @@ public class ApriltagAimingCmd extends Command{
     }
 
     public void shootInSpeaker(){
-      //if(swerveRotateToAngle.isFinished()){
+      if(swerveRotateToAngle.isFinished()){
+        System.out.println("minicommand finished");
         /*
         if (!movedarm){
         setArmPitchCmd = new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
@@ -104,7 +112,7 @@ public class ApriltagAimingCmd extends Command{
         }
         if (setArmPitchCmd.isFinished())
         */
-         // isCompleted = true;
+          isCompleted = true;
       }
       /*
       new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorSpeakerPresetAngle);
@@ -120,5 +128,5 @@ public class ApriltagAimingCmd extends Command{
         armSubsystem.runPushMotor(0.0);
         new SetArmPitchCmd(armSubsystem, PitchMotor.kPitchMotorIntakePresetAngle);
         */
-    //}//}}
+    }//}}
 }

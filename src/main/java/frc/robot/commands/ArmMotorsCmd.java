@@ -70,8 +70,6 @@ public class ArmMotorsCmd extends Command {
         pushMotorSpeed = armSubsystem.getShooterSpeed() < -3500 ? 0.5 : (intakeMotorsRunning.get() && !sensed ? 0.4 : shooterMotorsAmp.get() ? .5 : 0);
         armSubsystem.runPushMotor(pushMotorSpeed);
 
-        System.out.println(armSubsystem.getPhotoElectricSensor());
-
         //runs the intake motors until the sensor is triggered
         
         intakeMotorsSpeed = ((intakeMotorsRunning.get() && !sensed)|| armSubsystem.getShooterSpeed() < -3500|| shooterMotorsAmp.get()) ? 0.4 : 0;

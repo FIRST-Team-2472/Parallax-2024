@@ -144,7 +144,7 @@ public final class Constants {
   public static final class TargetPosConstants {
     // Motion constants for target position drive mode
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
-    public static final double kMaxAngularSpeed = //
+    public static final double kMaxAngularSpeed = 
         DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
     public static final double kForwardMaxAcceleration = 2;
